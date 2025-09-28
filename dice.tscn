@@ -1,11 +1,11 @@
 [gd_scene load_steps=7 format=3 uid="uid://cf7od124hnedj"]
 
-[ext_resource type="Script" uid="uid://cqeajxnbeggmg" path="res://dice.gd" id="1_ju2fo"]
 [ext_resource type="Texture2D" uid="uid://bum85h4xkb00s" path="res://sprites.png" id="2_xak8u"]
 [ext_resource type="Script" uid="uid://3v2pv30lpyu1" path="res://simon_says.gd" id="3_qu4n6"]
+[ext_resource type="Texture2D" uid="uid://df8udh38cc58g" path="res://dice.png" id="3_xak8u"]
 [ext_resource type="AudioStream" uid="uid://ck4r52fcc35u7" path="res://Pickup_Coin.wav" id="4_xak8u"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8eu0n"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xak8u"]
 texture = ExtResource("2_xak8u")
 texture_region_size = Vector2i(128, 128)
 0:0/0 = 0
@@ -13,46 +13,44 @@ texture_region_size = Vector2i(128, 128)
 
 [sub_resource type="TileSet" id="TileSet_8eu0n"]
 tile_size = Vector2i(128, 128)
-sources/1 = SubResource("TileSetAtlasSource_8eu0n")
+sources/1 = SubResource("TileSetAtlasSource_xak8u")
 
 [node name="GameWorld" type="Node2D"]
-script = ExtResource("1_ju2fo")
-
-[node name="Dice" type="VBoxContainer" parent="."]
-offset_left = 717.00006
-offset_top = -12.0
-offset_right = 987.7317
-offset_bottom = 647.0
-scale = Vector2(1.6400001, 1)
-alignment = 2
-
-[node name="Label" type="Label" parent="Dice"]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="Dice"]
-layout_mode = 2
-text = "ROLL 
-DICE
-"
 
 [node name="SimonSays" type="TileMapLayer" parent="."]
 tile_set = SubResource("TileSet_8eu0n")
 script = ExtResource("3_qu4n6")
 
+[node name="Sprite2D" type="Sprite2D" parent="SimonSays"]
+position = Vector2(830, 147)
+scale = Vector2(10.75, 10.5)
+texture = ExtResource("3_xak8u")
+hframes = 7
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="SimonSays"]
 stream = ExtResource("4_xak8u")
 
-[node name="correct_count" type="Label" parent="SimonSays"]
-offset_left = 793.0
-offset_top = 10.0
-offset_right = 833.0
-offset_bottom = 33.0
-scale = Vector2(1.3200003, 1)
+[node name="UI" type="VBoxContainer" parent="SimonSays"]
+offset_left = 718.0
+offset_top = -1.0
+offset_right = 988.732
+offset_bottom = 658.0
+scale = Vector2(1.64, 1)
+alignment = 2
 
-[node name="wrong_count" type="Label" parent="SimonSays"]
-offset_left = 842.0
-offset_top = 107.0
-offset_right = 882.0
-offset_bottom = 130.0
+[node name="correct_count" type="Label" parent="SimonSays/UI"]
+layout_mode = 2
 
-[connection signal="pressed" from="Dice/Button" to="." method="_on_button_pressed"]
+[node name="wrong_count" type="Label" parent="SimonSays/UI"]
+layout_mode = 2
+
+[node name="DiceLabel" type="Label" parent="SimonSays/UI"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="SimonSays/UI"]
+layout_mode = 2
+text = "ROLL 
+DICE
+"
+
+[connection signal="pressed" from="SimonSays/UI/Button" to="SimonSays" method="_on_button_pressed"]

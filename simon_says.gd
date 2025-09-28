@@ -4,8 +4,11 @@ const size = 5
 @onready var pos
 @onready var can_check = false
 @onready var chk_idx = 0
-@onready var correct_count = 0
-@onready var wrong_count = 0
+@onready var lives = Globals.lives_per_game
+
+func _ready() -> void:
+	$UI/correct_count.text = "Score : "+str(Globals.correct_count)
+	$UI/wrong_count.text = "Lives : "+str(lives)
 
 func create(n):
 	
@@ -35,12 +38,14 @@ func _input(event: InputEvent) -> void:
 		print(pos[chk_idx])
 		if pos[chk_idx] == click_co_ords.x + click_co_ords.y*size :
 			print("correct")
-			correct_count += 1
-			$correct_count.text = str(correct_count)
+			Globals.correct_count += 1
+			$UI/correct_count.text = "Score : "+str(Globals.correct_count)
 		else :
 			print("wrong")
-			wrong_count += 1
-			$wrong_count.text = str(wrong_count)
+			lives -= 1
+			$UI/wrong_count.text = "Lives : "+str(lives)
+			if lives <= 0 :
+				get_tree().change_scene_to_file("res://EndScreen.tscn")
 		chk_idx+=1
 		if chk_idx >= pos.size() :
 			can_check = false
@@ -48,3 +53,12 @@ func _input(event: InputEvent) -> void:
 func start_check():
 	chk_idx = 0
 	can_check = true
+
+func _on_button_pressed() -> void:
+	clear()
+	can_check = false
+	var dice_face = randi_range(1,6)
+	$Sprite2D.frame = dice_face
+	print(dice_face)
+	$UI/DiceLabel.text = str(dice_face)
+	create(dice_face)
