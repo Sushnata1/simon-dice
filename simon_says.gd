@@ -32,16 +32,21 @@ func create(n):
 
 func _input(event: InputEvent) -> void:
 	if can_check and event is InputEventMouseButton and event.pressed:
+		$CPUParticles2D.position = get_global_mouse_position()
 		var mouse_pos = get_local_mouse_position() #get_viewport().get_mouse_position()
 		var click_co_ords = local_to_map(mouse_pos)
 		print(click_co_ords)
 		print(pos[chk_idx])
 		if pos[chk_idx] == click_co_ords.x + click_co_ords.y*size :
 			print("correct")
+			$CPUParticles2D.color = Color.GREEN
+			$CPUParticles2D.emitting = true
 			Globals.correct_count += 1
 			$UI/correct_count.text = "Score : "+str(Globals.correct_count)
 		else :
 			print("wrong")
+			$CPUParticles2D.color = Color.RED
+			$CPUParticles2D.emitting = true
 			lives -= 1
 			$UI/wrong_count.text = "Lives : "+str(lives)
 			if lives <= 0 :
